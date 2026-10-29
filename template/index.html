@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#08111f">
+    <title>Yatraa — AI Travel Planner</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="background">
+        <div class="orb orb-one"></div>
+        <div class="orb orb-two"></div>
+        <div class="orb orb-three"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <header class="topbar">
+        <a class="brand" href="/">
+            <span class="brand-mark">✈</span>
+            <span>
+                <strong>Yatraa</strong>
+                <small>AI TRAVEL PLANNER</small>
+            </span>
+        </a>
+
+        <div class="topbar-right">
+            <span class="system-status">
+                <span class="pulse"></span>
+                All systems operational
+            </span>
+            <button class="new-trip" onclick="newTrip()">+ New Trip</button>
+        </div>
+    </header>
+
+    <main class="shell">
+        <section class="hero">
+            <div class="eyebrow">MULTI-AGENT TRAVEL INTELLIGENCE</div>
+            <h1>Travel planning,<br><span>reimagined by AI.</span></h1>
+            <p>
+                Tell Yatraa where you want to go. Our AI agents research flights,
+                hotels and destinations, then turn everything into one practical itinerary.
+            </p>
+        </section>
+
+        <section class="workspace">
+            <aside class="sidebar">
+                <div class="side-title">QUICK START</div>
+
+                <button class="destination-card" onclick="setPrompt('Plan a 7 day trip to Dubai from Delhi with flights, hotels, sightseeing and an estimated budget.')">
+                    <span class="destination-icon">🏙️</span>
+                    <span>
+                        <b>Dubai</b>
+                        <small>Luxury & city life</small>
+                    </span>
+                    <span class="arrow">→</span>
+                </button>
+
+                <button class="destination-card" onclick="setPrompt('Plan a 7 day Japan trip from Delhi including flights, hotels, sightseeing and a practical budget.')">
+                    <span class="destination-icon">🗾</span>
+                    <span>
+                        <b>Japan</b>
+                        <small>Culture & adventure</small>
+                    </span>
+                    <span class="arrow">→</span>
+                </button>
+
+                <button class="destination-card" onclick="setPrompt('Plan a 6 day Thailand trip from Delhi with affordable hotels, flights and the best places to visit.')">
+                    <span class="destination-icon">🌴</span>
+                    <span>
+                        <b>Thailand</b>
+                        <small>Beaches & food</small>
+                    </span>
+                    <span class="arrow">→</span>
+                </button>
+
+                <button class="destination-card" onclick="setPrompt('Plan a 5 day trip to Paris from Delhi with flights, hotels, sightseeing and estimated expenses.')">
+                    <span class="destination-icon">🗼</span>
+                    <span>
+                        <b>Paris</b>
+                        <small>Classic European escape</small>
+                    </span>
+                    <span class="arrow">→</span>
+                </button>
+
+                <div class="agent-stack">
+                    <div class="side-title">YOUR AI CREW</div>
+                    <div class="agent-row"><span class="agent-dot flight"></span><span>Flight Agent</span><em>Ready</em></div>
+                    <div class="agent-row"><span class="agent-dot hotel"></span><span>Hotel Agent</span><em>Ready</em></div>
+                    <div class="agent-row"><span class="agent-dot plan"></span><span>Itinerary Agent</span><em>Ready</em></div>
+                </div>
+            </aside>
+
+            <section class="planner">
+                <div class="planner-top">
+                    <div>
+                        <div class="section-kicker">YOUR NEXT ADVENTURE</div>
+                        <h2>Where are you going?</h2>
+                    </div>
+                    <div class="live-badge"><span></span> LIVE AI</div>
+                </div>
+
+                <div class="prompt-box">
+                    <textarea id="userInput"
+                        placeholder="Example: Plan a 7 day trip from Delhi to Bali under ₹80,000 with flights, hotels and sightseeing..."></textarea>
+
+                    <div class="prompt-footer">
+                        <div class="hint">
+                            <span>↵</span> Ctrl + Enter to generate
+                        </div>
+                        <button id="sendBtn" onclick="sendMessage()">
+                            <span id="btnText">Build my trip</span>
+                            <span id="btnLoader" class="loader hidden"></span>
+                            <span id="btnArrow">↗</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="suggestions">
+                    <span>Try asking</span>
+                    <button onclick="setPrompt('Plan a romantic 5 day trip to Bali from Delhi under ₹70,000.')">Romantic Bali</button>
+                    <button onclick="setPrompt('Plan a 4 day Goa trip from Delhi with a beach hotel and local sightseeing.')">Goa Weekend</button>
+                    <button onclick="setPrompt('Plan a budget friendly 10 day Europe trip from Delhi covering 3 countries.')">Europe on a budget</button>
+                </div>
+
+                <div class="how-it-works">
+                    <div class="process-line"></div>
+                    <div class="process-item">
+                        <span>01</span>
+                        <b>Research</b>
+                        <small>Flights & stays</small>
+                    </div>
+                    <div class="process-item">
+                        <span>02</span>
+                        <b>Analyze</b>
+                        <small>Budget & options</small>
+                    </div>
+                    <div class="process-item">
+                        <span>03</span>
+                        <b>Plan</b>
+                        <small>Day-by-day itinerary</small>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <section id="errorBox" class="error-box hidden"></section>
+
+        <section id="resultSection" class="results hidden">
+            <div class="results-head">
+                <div>
+                    <div class="section-kicker">YOUR PERSONALIZED PLAN</div>
+                    <h2>Your Yatraa itinerary</h2>
+                    <p id="threadInfo">Thread ID: —</p>
+                </div>
+                <div class="result-actions">
+                    <button class="secondary-btn" onclick="copyResult()">Copy</button>
+                    <button class="primary-btn" onclick="downloadPDF()">Download PDF</button>
+                </div>
+            </div>
+
+            <div id="pdfContent" class="travel-document">
+                <div class="document-brand">
+                    <span>✈</span>
+                    <div><b>Yatraa</b><small>AI Travel Plan</small></div>
+                </div>
+                <div id="resultBox" class="result-box"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <span>Yatraa</span> · Built with FastAPI · LangGraph · Groq · PostgreSQL · Tavily · AviationStack
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="/static/script.js"></script>
+</body>
+</html>
